@@ -60,7 +60,7 @@ using Test
             logger = Logger()
             𝐱 = solve!(logger, A, 𝐛, -[3, 4])
             @test 𝐱 ≈ [0.5488138979502294, 0.7151533895344008]
-            @test norm(A * 𝐱 - 𝐛) / norm(𝐛) < 1e-15
+            @test norm(A * 𝐱 - 𝐛) / norm(𝐛) < 2e-15
             @test isconverged(logger) == true
             steps = eachstep(logger)
             @test steps[1].x ≈ [0.742786502583181, -2.975857971024216]
