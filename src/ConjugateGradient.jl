@@ -3,7 +3,7 @@ module ConjugateGradient
 using LinearAlgebra: norm, ⋅
 using OffsetArrays: OffsetVector, Origin
 
-export solve, solve!
+export solve!
 
 struct Step
     alpha::Float64
@@ -33,7 +33,6 @@ function solve!(logger, A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxite
     end
     return 𝐱ₙ
 end
-solve(A, 𝐛, 𝐱₀=zeros(length(𝐛)); kwargs...) = solve!(EmptyLogger(), A, 𝐛, 𝐱₀; kwargs...)
 
 function Base.show(io::IO, step::Step)
     if get(io, :compact, false) || get(io, :typeinfo, nothing) == typeof(step)
