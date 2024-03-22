@@ -3,7 +3,7 @@ module ConjugateGradient
 using LinearAlgebra: norm, ⋅
 using OffsetArrays: OffsetVector, Origin
 
-export Logger, solve, solve!
+export solve, solve!
 
 struct Step
     alpha::Float64
@@ -12,17 +12,6 @@ struct Step
     r::Vector{Float64}
     p::Vector{Float64}
 end
-
-abstract type AbstractLogger end
-mutable struct EmptyLogger <: AbstractLogger
-    isconverged::Bool
-end
-EmptyLogger() = EmptyLogger(false)
-mutable struct Logger <: AbstractLogger
-    isconverged::Bool
-    data::OffsetVector{Step}
-end
-Logger() = Logger(false, OffsetVector([], Origin(0)))
 
 function solve!(logger, A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
     𝐱ₙ = 𝐱₀
