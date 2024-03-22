@@ -3,7 +3,7 @@ module ConjugateGradient
 using LinearAlgebra: norm, ⋅
 using OffsetArrays: OffsetVector, Origin
 
-export solve!
+export solve
 
 struct Step
     alpha::Float64
@@ -13,13 +13,15 @@ struct Step
     p::Vector{Float64}
 end
 
-function solve!(logger, A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
+function solve(A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
+    isconverged = false
     𝐱ₙ = 𝐱₀
     𝐫ₙ = 𝐛 - A * 𝐱ₙ  # Initial residual, 𝐫₀
     𝐩ₙ = 𝐫ₙ  # Initial momentum, 𝐩₀
-    for n in 0:maxiter
+    steps = OffsetVector([], Origin(0))
+    for _ in 0:maxiter
         if norm(𝐫ₙ) < atol
-            setconverged!(logger)
+            isconverged = true
             break
         end
         A𝐩ₙ = A * 𝐩ₙ  # Avoid duplicated computation
@@ -28,10 +30,10 @@ function solve!(logger, A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxite
         𝐫ₙ₊₁ = 𝐫ₙ - αₙ * A𝐩ₙ
         βₙ = 𝐫ₙ₊₁ ⋅ 𝐫ₙ₊₁ / (𝐫ₙ ⋅ 𝐫ₙ)
         𝐩ₙ₊₁ = 𝐫ₙ₊₁ + βₙ * 𝐩ₙ
-        log!(logger, Step(n, αₙ, βₙ, 𝐱ₙ, 𝐫ₙ, 𝐩ₙ))
+        push!(steps, Step(αₙ, βₙ, 𝐱ₙ, 𝐫ₙ, 𝐩ₙ))
         𝐱ₙ, 𝐫ₙ, 𝐩ₙ = 𝐱ₙ₊₁, 𝐫ₙ₊₁, 𝐩ₙ₊₁  # Prepare for a new iteration
     end
-    return 𝐱ₙ
+    return 𝐱ₙ, steps, isconverged
 end
 
 function Base.show(io::IO, step::Step)
