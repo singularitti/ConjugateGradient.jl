@@ -3,7 +3,7 @@ module ConjugateGradient
 using LinearAlgebra: norm, ⋅
 using OffsetArrays: OffsetVector, Origin
 
-export Logger, solve, solve!, isconverged, eachstep
+export Logger, solve, solve!, isconverged
 
 struct Step
     alpha::Float64
@@ -55,27 +55,6 @@ function setconverged!(logger::AbstractLogger)
 end
 
 isconverged(ch::Logger) = ch.isconverged
-
-struct EachStep
-    history::Logger
-end
-
-eachstep(logger::Logger) = EachStep(logger)
-
-Base.iterate(iter::EachStep) = iterate(iter.history.data)
-Base.iterate(iter::EachStep, state) = iterate(iter.history.data, state)
-
-Base.eltype(::EachStep) = Step
-
-Base.length(iter::EachStep) = length(iter.history.data)
-
-Base.size(iter::EachStep, dim...) = size(iter.history.data, dim...)
-
-Base.getindex(iter::EachStep, i) = getindex(iter.history.data, i)
-
-Base.firstindex(iter::EachStep) = firstindex(iter.history.data)
-
-Base.lastindex(iter::EachStep) = lastindex(iter.history.data)
 
 function Base.show(io::IO, step::Step)
     if get(io, :compact, false) || get(io, :typeinfo, nothing) == typeof(step)
