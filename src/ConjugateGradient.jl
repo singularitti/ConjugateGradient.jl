@@ -6,7 +6,6 @@ using OffsetArrays: OffsetVector, Origin
 export Logger, solve, solve!, isconverged, eachstep
 
 struct Step
-    n::UInt64
     alpha::Float64
     beta::Float64
     x::Vector{Float64}
