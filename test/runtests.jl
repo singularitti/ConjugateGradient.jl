@@ -25,6 +25,19 @@ using Test
         @test iterations[2].x ≈ [0.09090909090909094, 0.6363636363636365]
     end
 
+    @testset "Test with an already-converged initial guess" begin
+        A = [
+            4 1
+            1 3
+        ]
+        𝐛 = [1, 2]
+        𝐱₀ = [1 / 11, 7 / 11]  # An already-converged initial guess
+        𝐱, iterations, isconverged = cg(A, 𝐛, 𝐱₀; atol=1e-24)
+        @test isconverged
+        @test 𝐱₀ == 𝐱
+        @test isempty(iterations)
+    end
+
     # Example is from https://optimization.mccormick.northwestern.edu/index.php/Conjugate_gradient_methods#Numerical_Example_of_the_method
     @testset "Test Erik Zuehlke's example" begin
         A = [
