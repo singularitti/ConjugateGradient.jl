@@ -40,10 +40,10 @@ Solves the linear system ``𝐀 𝐱 = 𝐛`` using the Conjugate Gradient metho
 - `iterations`: an `OffsetVector` containing iteration history for each step.
 - `isconverged`: a boolean indicating whether the algorithm has converged.
 """
-function cg(A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
+function cg(𝐀, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
     isconverged = false
     𝐱ₙ = 𝐱₀
-    𝐫ₙ = 𝐛 - A * 𝐱ₙ  # Initial residual, 𝐫₀
+    𝐫ₙ = 𝐛 - 𝐀 * 𝐱ₙ  # Initial residual, 𝐫₀
     𝐩ₙ = 𝐫ₙ  # Initial momentum, 𝐩₀
     iterations = OffsetVector([], Origin(0))
     for _ in 0:maxiter
@@ -51,10 +51,10 @@ function cg(A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
             isconverged = true
             break
         end
-        A𝐩ₙ = A * 𝐩ₙ  # Avoid duplicated computation
-        αₙ = 𝐫ₙ ⋅ 𝐫ₙ / (𝐩ₙ ⋅ A𝐩ₙ)  # `⋅` means dot product between two vectors
+        𝐀𝐩ₙ = 𝐀 * 𝐩ₙ  # Avoid duplicated computation
+        αₙ = 𝐫ₙ ⋅ 𝐫ₙ / (𝐩ₙ ⋅ 𝐀𝐩ₙ)  # `⋅` means dot product between two vectors
         𝐱ₙ₊₁ = 𝐱ₙ + αₙ * 𝐩ₙ
-        𝐫ₙ₊₁ = 𝐫ₙ - αₙ * A𝐩ₙ
+        𝐫ₙ₊₁ = 𝐫ₙ - αₙ * 𝐀𝐩ₙ
         βₙ = 𝐫ₙ₊₁ ⋅ 𝐫ₙ₊₁ / (𝐫ₙ ⋅ 𝐫ₙ)
         𝐩ₙ₊₁ = 𝐫ₙ₊₁ + βₙ * 𝐩ₙ
         push!(iterations, Iteration(αₙ, βₙ, 𝐱ₙ, 𝐫ₙ, 𝐩ₙ))
