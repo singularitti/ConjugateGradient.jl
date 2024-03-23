@@ -6,10 +6,8 @@ DocMeta.setdocmeta!(ConjugateGradient, :DocTestSetup, :(using ConjugateGradient)
 makedocs(;
     modules=[ConjugateGradient],
     authors="singularitti <singularitti@outlook.com> and contributors",
-    repo="https://github.com/singularitti/ConjugateGradient.jl/blob/{commit}{path}#{line}",
     sitename="ConjugateGradient.jl",
     format=Documenter.HTML(;
-        prettyurls=get(ENV, "CI", "false") == "true",
         canonical="https://singularitti.github.io/ConjugateGradient.jl",
         edit_link="main",
         assets=String[],

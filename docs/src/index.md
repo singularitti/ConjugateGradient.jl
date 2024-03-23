@@ -1,3 +1,7 @@
+```@meta
+CurrentModule = ConjugateGradient
+```
+
 # ConjugateGradient
 
 Documentation for [ConjugateGradient](https://github.com/singularitti/ConjugateGradient.jl).
