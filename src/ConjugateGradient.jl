@@ -3,7 +3,7 @@ module ConjugateGradient
 using LinearAlgebra: norm, ⋅
 using OffsetArrays: OffsetVector, Origin
 
-export cg
+export Iteration, cg
 
 """
     Iteration(alpha, beta, x, r, p)
