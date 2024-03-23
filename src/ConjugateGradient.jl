@@ -36,18 +36,14 @@ function solve(A, 𝐛, 𝐱₀=zeros(length(𝐛)); atol=eps(), maxiter=2000)
     return 𝐱ₙ, iterations, isconverged
 end
 
-function Base.show(io::IO, iteration::Iteration)
-    if get(io, :compact, false) || get(io, :typeinfo, nothing) == typeof(iteration)
-        Base.show_default(IOContext(io, :limit => true), iteration)  # From https://github.com/mauro3/Parameters.jl/blob/ecbf8df/src/Parameters.jl#L556
-    else
-        println(io, summary(iteration))
-        println(io, " n = ", Int(iteration.n))
-        println(io, " α = ", iteration.alpha)
-        println(io, " β = ", iteration.beta)
-        println(io, " 𝐱 = ", iteration.x)
-        println(io, " 𝐫 = ", iteration.r)
-        println(io, " 𝐩 = ", iteration.p)
-    end
+function Base.show(io::IO, ::MIME"text/plain", iteration::Iteration)
+    println(io, summary(iteration))
+    println(io, " α = ", iteration.alpha)
+    println(io, " β = ", iteration.beta)
+    println(io, " 𝐱 = ", iteration.x)
+    println(io, " 𝐫 = ", iteration.r)
+    println(io, " 𝐩 = ", iteration.p)
+    return nothing
 end
 
 end
